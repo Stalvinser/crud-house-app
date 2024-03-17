@@ -1,0 +1,67 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: savin
+      changes:
+        - createTable:
+            tableName: users
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(255)
+              - column:
+                  name: age
+                  type: int
+              - column:
+                  name: password
+                  type: varchar(255)
+
+        - createTable:
+            tableName: houses
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: address
+                  type: varchar(255)
+              - column:
+                  name: owner_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: fk_house_owner
+                    references: users(id)
+
+        - createTable:
+            tableName: house_residents
+            columns:
+              - column:
+                  name: house_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: fk_resident_house
+                    references: houses(id)
+                    nullable: false
+              - column:
+                  name: resident_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: fk_house_resident
+                    references: users(id)
+                    nullable: false
+
+        - addPrimaryKey:
+            constraintName: pk_house_residents
+            tableName: house_residents
+            columnNames: house_id, resident_id
